@@ -1,23 +1,4 @@
 services:
-  web:
-    build: ./src/main/java/com.example.capstone
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/yourdatabase
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-    depends_on:
-      - db
-      - ml
-
-  ml:
-    build: ./ml
-    volumes:
-      - "./ml:/app"
-    ports:
-      - "5000:5000"
-
   db:
     image: 'mariadb:latest'
     environment:
@@ -27,5 +8,3 @@ services:
       - 'MARIADB_USER=myuser'
     ports:
       - '3306'
-    volumes:
-      - "volume location"
