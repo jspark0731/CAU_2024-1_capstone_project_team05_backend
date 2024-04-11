@@ -1,5 +1,6 @@
 services:
   spring-boot-backend:
+    image: ghcr.io/${{ github.repository }}:latest
     build: .
     ports:
       - "8080:8080"
