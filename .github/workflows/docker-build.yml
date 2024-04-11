@@ -1,0 +1,35 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up GraalVM
+      uses: graalvm/setup-graalvm@v1
+      with:
+        version: '22.0.0'
+        java-version: '17'
+        components: 'native-image'
+        github-token: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+
+    - name: Build Docker image
+      run: |
+        docker-compose build
+
+    - name: Push Docker image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        echo $DOCKER_PASSWORD | docker login https://ghcr.io -u $DOCKER_USERNAME --password-stdin
+        docker-compose push
