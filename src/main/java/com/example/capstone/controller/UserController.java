@@ -19,7 +19,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class UserController {
+public class UserController
+{
         @Autowired
         private UserService userService;
 
@@ -29,8 +30,7 @@ public class UserController {
         }
 
         @GetMapping("/")
-        public String home(Model model)
-        { // 인증된 사용자의 정보를 보여줌
+        public String home(Model model) { // 인증된 사용자의 정보를 보여줌
                 Long id = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 // token에 저장되어 있는 인증된 사용자의 id 값
 
@@ -38,14 +38,6 @@ public class UserController {
                 userVo.setPassword(null); // password는 보이지 않도록 null로 설정
                 model.addAttribute("user", userVo);
                 return "home";
-        }
-
-        @GetMapping("/userList")
-        public String getUserList(Model model)
-        { // User 테이블의 전체 정보를 보여줌
-                List<UserVo> userList = userService.getUserList();
-                model.addAttribute("list", userList);
-                return "userListPage";
         }
 
         @GetMapping("/login")
@@ -72,7 +64,7 @@ public class UserController {
                 try {
                         userService.signup(userVo);
                         return ResponseEntity.ok("User created successfully.");
-                } catch (DuplicateKeyException e) {
+                } catch (DuplicateKeyException e) { // reject duplicated id
                         return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already in use.");
                 } catch (Exception e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
