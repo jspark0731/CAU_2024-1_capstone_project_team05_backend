@@ -31,13 +31,13 @@ jobs:
       run: ./gradlew build -x test
 
     - name: Build Docker image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         echo $DOCKER_PASSWORD | docker login https://ghcr.io -u $DOCKER_USERNAME --password-stdin
         docker-compose build
 
     - name: Push Docker image
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         docker-compose push
