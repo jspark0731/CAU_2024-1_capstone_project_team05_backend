@@ -1,7 +1,6 @@
 services:
   spring-boot-backend:
-    image: ${IMAGE_NAME}
-    build: .
+    image: ghcr.io/pscr-kdh/capstone_project_team05_backend
     ports:
       - "8080:8080"
     volumes:
