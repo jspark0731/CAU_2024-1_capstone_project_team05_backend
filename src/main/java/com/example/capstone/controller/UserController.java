@@ -6,16 +6,12 @@ import com.example.capstone.vo.UserVo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/api")
@@ -24,50 +20,43 @@ public class UserController
         @Autowired
         private UserService userService;
 
-        @GetMapping("/path/{pathVariable}")
-        public String redirectToFrontendApp(@PathVariable String pathVariable) {
+        @GetMapping("/")
+        public String serveFrontendApp() {
                 return "forward:/";
         }
 
-        @GetMapping("/")
-        public String home(Model model) { // 인증된 사용자의 정보를 보여줌
-                Long id = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                // token에 저장되어 있는 인증된 사용자의 id 값
-
-                UserVo userVo = userService.getUserById(id);
-                userVo.setPassword(null); // password는 보이지 않도록 null로 설정
-                model.addAttribute("user", userVo);
-                return "home";
-        }
-
-        @GetMapping("/login")
-        public String loginPage()
-        { // 로그인되지 않은 상태이면 로그인 페이지를, 로그인된 상태이면 home 페이지를 보여줌
+        @GetMapping("/sign-in")
+        public String signInPage()
+        { // processing request sign-in page
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication instanceof AnonymousAuthenticationToken)
-                        return "loginPage";
-                return "redirect:/";
+                if (authentication instanceof AnonymousAuthenticationToken) {
+                        return "redirect:/api/sign-in"; // 여기서 "signInPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
+                }
+                return "redirect:/"; // 이미 인증된 사용자는 홈으로 리디렉션
         }
 
-        @GetMapping("/signup")
+        @GetMapping("/sign-up")
         public String signupPage()
         {  // 회원 가입 페이지
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication instanceof AnonymousAuthenticationToken)
-                        return "signupPage";
-                return "redirect:/";
+                if (authentication instanceof AnonymousAuthenticationToken) {
+                        return "redirect:/api/sign-up"; // 여기서 "signUpPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
+                }
+                return "redirect:/"; // redirect to "/" pre-authenticated
         }
 
-        @PostMapping("/signup")
-        public ResponseEntity<?> signup(@RequestBody UserVo userVo)
-        {
+        @PostMapping("/sign-up")
+        public String signup(@RequestBody UserVo userVo, RedirectAttributes redirectAttributes) {
                 try {
                         userService.signup(userVo);
-                        return ResponseEntity.ok("User created successfully.");
-                } catch (DuplicateKeyException e) { // reject duplicated id
-                        return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: Username is already in use.");
+                        return "redirect:/sign-in"; // redirect to "/" success to auth
+                } catch (DuplicateKeyException e) {
+                        // 중복 ID 에러 처리
+                        redirectAttributes.addFlashAttribute("error", "Username is already in use");
+                        return "redirect:/sign-up"; // 에러 메시지와 함께 회원가입 페이지로 리디렉션
                 } catch (Exception e) {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+                        redirectAttributes.addFlashAttribute("error", "An unexpected error occurred");
+                        return "redirect:/sign-up"; // 다른 예외 발생 시
                 }
         }
 
