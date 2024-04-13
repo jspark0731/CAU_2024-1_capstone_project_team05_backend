@@ -10,9 +10,9 @@
     <!-- 회원가입 -->
     <insert id="insertUser">
         INSERT INTO User
-            (name, username, email, password, address, phone, website, company)
+            (name, username, email, password)
         VALUES
-            (#{name}, #{username}, #{email}, #{password}, #{address}, #{phone}, #{website}, #{company})
+            (#{name}, #{username}, #{email}, #{password})
     </insert>
 
     <!-- 회원 정보 가져오기 -->
@@ -34,11 +34,7 @@
         SET name = #{name},
             username = #{username},
             email = #{email},
-            password = #{password},
-            address = #{address},
-            phone = #{phone},
-            website = #{website},
-            company = #{company}
+            password = #{password}
         WHERE id = #{id}
     </update>
 

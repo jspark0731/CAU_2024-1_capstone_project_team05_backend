@@ -12,7 +12,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=team05
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
   db:
-    image: 'mariadb:latest'
+    image: 'mariadb:10.5'
     environment:
       - 'MARIADB_DATABASE=capstone-project'
       - 'MARIADB_PASSWORD=team05'
