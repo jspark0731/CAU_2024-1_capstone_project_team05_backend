@@ -30,7 +30,7 @@ public class UserController
         { // processing request sign-in page
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication instanceof AnonymousAuthenticationToken) {
-                        return "redirect:/api/sign-up"; // 여기서 "signInPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
+                        return "redirect:/api/sign-in"; // 여기서 "signInPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
                 }
                 return "redirect:/"; // 이미 인증된 사용자는 홈으로 리디렉션
         }
@@ -40,14 +40,13 @@ public class UserController
         {  // 회원 가입 페이지
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication instanceof AnonymousAuthenticationToken) {
-                        return "redirect:/api/sign-up";
+                        return "redirect:/api/sign-up"; // 여기서 "signUpPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
                 }
                 return "redirect:/"; // redirect to "/" pre-authenticated
         }
 
         @PostMapping("/sign-up")
-        public String signup(@RequestBody UserVo userVo, RedirectAttributes redirectAttributes)
-	{
+        public String signup(@RequestBody UserVo userVo, RedirectAttributes redirectAttributes) {
                 try {
                         userService.signup(userVo);
                         return "redirect:/sign-in"; // redirect to "/" success to auth
