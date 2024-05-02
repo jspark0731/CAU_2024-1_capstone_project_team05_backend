@@ -30,7 +30,7 @@ public class UserController
         { // processing request sign-in page
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication instanceof AnonymousAuthenticationToken) {
-                        return "redirect:/api/sign-up"; // 여기서 "signInPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
+                        return "redirect:/api/sign-in"; // 여기서 "signInPage"는 실제로 프론트엔드 라우트로 대체되어야 한다.
                 }
                 return "redirect:/"; // 이미 인증된 사용자는 홈으로 리디렉션
         }

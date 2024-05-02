@@ -6,18 +6,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @Component
-public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler
+{
+        private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationFailureHandler.class);
 
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                            AuthenticationException exception) throws IOException, ServletException
-        {
-                // 로그인 실패 시 수행할 로직 (예: 에러 메시지 설정)
+                                            AuthenticationException exception) throws IOException {
+                logger.error("Authentication failed: {}", exception.getMessage());
+                response.setContentType("application/json");
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().print("Authentication failed: " + exception.getMessage());
+                response.getWriter().write("{\"error\": \"Authentication failed\", \"message\": \"" + exception.getMessage() + "\"}");
         }
 }
