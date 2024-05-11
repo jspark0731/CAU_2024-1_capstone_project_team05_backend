@@ -14,6 +14,7 @@ public class WebConfig implements WebMvcConfigurer
                         .allowedOrigins("http://localhost:3000") // React 앱의 URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")
+                        .exposedHeaders("*")
                         .allowCredentials(true);
         }
 }
