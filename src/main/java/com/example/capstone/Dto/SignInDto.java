@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignInDto
 {
-        @NotBlank   // *spring-boot-starter-validation, 필수값
+        @NotBlank
         private String email;
         @NotBlank
         private  String password;

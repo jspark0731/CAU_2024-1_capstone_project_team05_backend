@@ -20,7 +20,6 @@ public class SecurityConfig
         SecurityFilterChain filterChain(HttpSecurity http) throws Exception
         {
                 http
-                        // 403, "http.csrf.disable()" deprecated
                         .csrf(AbstractHttpConfigurer::disable)
                         .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                                 // HTTP 요청에 대한 권한 설정, 모든 경로로 지정("/**")

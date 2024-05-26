@@ -5,6 +5,7 @@ import com.example.capstone.Dto.SignInDto;
 import com.example.capstone.Dto.SignInResponseDto;
 import com.example.capstone.Dto.SignUpDto;
 import com.example.capstone.Service.AuthService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,44 +17,33 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController
 {
-//        @Autowired
-//        private UserService userService;
         @Autowired
         private AuthService authService;
 
         @PostMapping("/sign-in")
-        public ResponseDto<?> signIn(@RequestBody SignInDto requestBody)
+        public ResponseEntity<?> signIn(@RequestBody SignInDto requestBody)
         {
                 ResponseDto<?> result = authService.signIn(requestBody);
-                return result;
+                return setToken(result);
         }
 
-        // User Type에 의한 결정
-//        @PostMapping("/counselorSignIn")
-//        public ResponseDto<?> counselorSignIn(@RequestBody SignInDto requestBody){
-//                ResponseDto<?> result = authService.counselorSignIn(requestBody);
-//                return result;
-//        }
-//
-//        @PostMapping("/managerSignIn")
-//        public ResponseEntity<?> managerSignIn(@RequestBody SignInDto requestBody) {
-//                ResponseDto<?> result = authService.managerSignIn(requestBody);
-//                return setToken(result);
-//        }
 
         // Response 결과에 따라 Header에 Token 설정
-        private ResponseEntity<?> setToken(ResponseDto<?> result) {
+        private ResponseEntity<?> setToken(ResponseDto<?> result)
+        {
                 // 요청이 성공인 경우
-                if(result.getResult()) {
-                        // reulst -> data -> token 추출
+                if(result.getResult())
+                {
+                        // result -> data -> token 추출
                         SignInResponseDto signInResponse = (SignInResponseDto) result.getData();
 
                         // Header에 Auth에 Token 지정, Body에는 result 그대로 작성 (result 내의 token은 제거해도 될듯)
                         return ResponseEntity.ok()
                                 .header("Authorization", "Bearer " + signInResponse.getToken())
                                 .body(result);
-                } else {
-                        return ResponseEntity.ok().body(result);
+                } else
+                {
+                        return ResponseEntity.status(404).body(result);
                 }
         }
 
@@ -97,8 +87,8 @@ public class AuthController
 //                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the user");
 //                }
 //        }
-
-        // 사용자 탈퇴
+//
+//        // 사용자 탈퇴
 //        @DeleteMapping("/user/delete")
 //        public ResponseEntity<?> deleteUser(Authentication authentication, @RequestBody UserVo userVo) {
 //                try {

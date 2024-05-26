@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer
         public void addCorsMappings(CorsRegistry registry)
         {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000") // React 앱의 URL
+                        .allowedOrigins("http://localhost:3000", "http://localhost:5000") // React 앱의 URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                         .allowedHeaders("*")
                         .exposedHeaders("*")

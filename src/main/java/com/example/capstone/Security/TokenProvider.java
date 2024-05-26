@@ -15,7 +15,7 @@ import java.util.Date;
 @Service
 public class TokenProvider
 {
-        private static final String SECURITY_KEY = "inputYourSecurityKey";
+        private static final String SECURITY_KEY = "input-Your-Very-long-long-long-long-Security-Secret-Key";
 
         // JWT 생성 메서드
         public String createJwt(String email, int duration)
@@ -24,7 +24,7 @@ public class TokenProvider
                 {
                         // 현재 시간 기준 1시간 뒤로 만료시간 설정
                         Instant now = Instant.now();
-                        Instant exprTime = now.plusSeconds(duration);
+                        Instant exprTime = now.plusSeconds(duration / 1000);
 
                         // JWT Claim 설정
                         // *Claim 집합 << 내용 설정 (페이로드 설정)
@@ -48,6 +48,7 @@ public class TokenProvider
                         return signedJWT.serialize();
                 } catch (JOSEException e)
                 {
+                        e.printStackTrace();
                         return null;
                 }
         }
@@ -70,6 +71,7 @@ public class TokenProvider
                         }
                 } catch (Exception e)
                 {
+                        e.printStackTrace();
                         return null;
                 }
         }
