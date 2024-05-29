@@ -13,17 +13,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "Music")
+@Table(name="Music")
 public class MLEntity {
         @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
         private String model;
-        private String type;
+        private String instrumentType;
+        private String fileName;
         private String filePath;
 
         public MLEntity(MLDto dto) {
                 this.model = dto.getModel();
-                this.type = dto.getType();
-                this.filePath =  "";
+                this.instrumentType = dto.getInstrumentType();
+                this.fileName = dto.getFileName();
+                this.filePath = dto.getFilePath();
         }
 }

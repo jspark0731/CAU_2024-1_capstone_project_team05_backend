@@ -14,7 +14,6 @@ public class SignUpDto
         private String username;
         private String name;
         private String password;
-        private String userType;
         private LocalDateTime createdAt;
         private LocalDateTime editedAt;
         private LocalDateTime lastLoginAt;

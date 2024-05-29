@@ -24,7 +24,6 @@ public class UserEntity
         private String email;
         private String password;
         private String name;
-        private String userType;
         private LocalDateTime createdAt;
         private LocalDateTime editedAt;
         private LocalDateTime lastLoginAt;
@@ -34,7 +33,6 @@ public class UserEntity
                 this.email = dto.getEmail();
                 this.password = dto.getPassword();
                 this.name = dto.getName();
-                this.userType = dto.getUserType();
                 this.createdAt = LocalDateTime.now();
                 this.editedAt = LocalDateTime.now();
         }
