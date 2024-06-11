@@ -16,11 +16,10 @@ public class CorsConfig {
                         public void addCorsMappings(CorsRegistry registry)
                         {
                                 registry.addMapping("/**")
-                                        .allowedOrigins("http://localhost:3000", "http://localhost:5000") // frontend app hosted, machine-learning container hosted
+                                        .allowedOrigins("http://localhost:3000", "http://machine-learning:5000") // frontend app hosted, machine-learning container hosted
                                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                                         .allowedHeaders("*")
                                         .allowCredentials(true);
-
                         }
                 };
         }

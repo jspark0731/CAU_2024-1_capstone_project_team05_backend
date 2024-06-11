@@ -1,16 +1,14 @@
 package com.example.capstone.Entity;
 
 import com.example.capstone.Dto.SignUpDto;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,6 +25,9 @@ public class UserEntity
         private LocalDateTime createdAt;
         private LocalDateTime editedAt;
         private LocalDateTime lastLoginAt;
+
+        @OneToMany(mappedBy = "userEmail")
+        private List<MLEntity> mlEntities;
 
         public UserEntity(SignUpDto dto)
         {

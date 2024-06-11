@@ -1,7 +1,6 @@
 package com.example.capstone.Entity;
 
 import com.example.capstone.Dto.MLDto;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,16 +16,29 @@ import lombok.NoArgsConstructor;
 public class MLEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+        private int id;
+
         private String model;
         private String instrumentType;
         private String fileName;
         private String filePath;
 
-        public MLEntity(MLDto dto) {
+        @Column(name = "userEmail")
+        private String userEmail;
+
+        @Column(name = "spleeterOutputPath")
+        private String spleeterOutputPath;
+
+        @Column(name = "basicPitchOutputPath")
+        private String basicPitchOutputPath;
+
+        public MLEntity(MLDto dto, String userEmail) {
                 this.model = dto.getModel();
                 this.instrumentType = dto.getInstrumentType();
                 this.fileName = dto.getFileName();
                 this.filePath = dto.getFilePath();
+                this.userEmail = userEmail;
+                this.spleeterOutputPath = dto.getSpleeterOutputPath();
+                this.basicPitchOutputPath = dto.getBasicPitchOutputPath();
         }
 }

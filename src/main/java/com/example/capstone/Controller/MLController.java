@@ -27,6 +27,7 @@ public class MLController
                 @RequestPart(value = "file", required = true) MultipartFile file,
                 @RequestParam(value = "model", required = true) String model,
                 @RequestParam(value = "instrumentType", required = true) String instrumentType,
+                @RequestParam(value = "generateSheet", required = true) String generateSheet,
                 @RequestHeader(value = "Authorization", required = true) String token)
         {
                 logger.info("Received request - file: {}, model: {}, instrumentType: {}, token: {}",
@@ -46,15 +47,12 @@ public class MLController
                 String fileName = file.getOriginalFilename();
                 String filePath = mlService.defineFilePath(email, fileName);
 
-                MLDto mlDto = new MLDto(token, model, instrumentType, fileName, filePath);
-                ResponseDto<?> result = mlService.fileUploadToMLContainer(mlDto, file);
+                MLDto mlDto = new MLDto(token, 0, model, instrumentType, fileName, filePath, email, "", "");
+                ResponseDto<?> result = mlService.saveFileAndData(mlDto, file);
 
                 if (result.getResult()) {
-                        String definedFilePath = result.getData().toString(); // Assuming data contains definedFilePath
-                        logger.info("definedFilePath : {}", definedFilePath);
-
                         try {
-                                mlService.sendFilePathToFastApi(definedFilePath);
+                                mlService.sendMLDtoToFastApi(mlDto);
                         } catch (Exception e) {
                                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.setFailed("Failed to send file path to FastAPI server"));
                         }
