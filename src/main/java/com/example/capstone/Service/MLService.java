@@ -17,10 +17,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.Map;
 
 @Service
-public class MLService
-{
+public class MLService {
         private static final Logger logger = LoggerFactory.getLogger(MLService.class);
 
         @Autowired
@@ -29,30 +29,25 @@ public class MLService
         @Autowired
         private TokenProvider tokenProvider;
 
-        public String getCurrentUserEmail(String token)
-        {
+        public String getCurrentUserEmail(String token) {
                 return tokenProvider.validateJwt(token);
         }
 
-        public String defineFilePath(String email, String fileName)
-        {
+        public String defineFilePath(String email, String fileName) {
                 String saveDirPath = "/spleeter_input/" + email;
                 String saveFilePath = saveDirPath + "/" + fileName;
                 logger.info("Save Directory Path: {}", saveDirPath);
                 logger.info("Save File Path: {}", saveFilePath);
 
                 File saveDir = new File(saveDirPath);
-                if (!saveDir.exists())
-                {
+                if (!saveDir.exists()) {
                         saveDir.mkdirs();
                 }
                 return saveFilePath;
         }
 
-        public ResponseDto<?> saveFileAndData(MLDto mlDto, MultipartFile file)
-        {
-                try
-                {
+        public ResponseDto<?> saveFileAndData(MLDto mlDto, MultipartFile file) {
+                try {
                         String parsedEmail = mlDto.getEmail().split("@")[0];
                         logger.info("Current User Email: {}", parsedEmail);
 
@@ -79,14 +74,12 @@ public class MLService
                         mlDto.setId(mlEntity.getId());
 
                         return ResponseDto.setSuccessData("File uploaded and processed successfully.", saveFilePath);
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                         return ResponseDto.setFailed("File upload failed: " + e.getMessage());
                 }
         }
 
-        public void sendMLDtoToFastApi(MLDto mlDto) throws Exception
-        {
+        public String sendMLDtoToFastApi(MLDto mlDto) throws Exception {
                 String fastApiUrl = "http://machine-learning:5000/api/ml/ml_dto";
 
                 RestTemplate restTemplate = new RestTemplate();
@@ -95,16 +88,16 @@ public class MLService
 
                 HttpEntity<MLDto> request = new HttpEntity<>(mlDto, headers);
 
-                ResponseEntity<String> response;
-
                 try
                 {
-                        response = restTemplate.postForEntity(fastApiUrl, request, String.class);
+                        ResponseEntity<Map> response = restTemplate.postForEntity(fastApiUrl, request, Map.class);
                         if (!response.getStatusCode().is2xxSuccessful())
                         {
                                 logger.error("Failed to send MLDto to FastAPI server. Status code: " + response.getStatusCode() + ", Response: " + response.getBody());
                                 throw new Exception("Failed to send MLDto to FastAPI server. Status code: " + response.getStatusCode());
                         }
+                        Map<String, String> responseBody = response.getBody();
+                        return responseBody.get("musescoreOutputPath");
                 } catch (Exception e)
                 {
                         logger.error("Error sending MLDto to FastAPI server: " + e.getMessage(), e);
