@@ -32,6 +32,9 @@ public class MLEntity {
         @Column(name = "basicPitchOutputPath")
         private String basicPitchOutputPath;
 
+        @Column(name = "musescoreOutputPath")
+        private String musescoreOutputPath;
+
         public MLEntity(MLDto dto, String userEmail) {
                 this.model = dto.getModel();
                 this.instrumentType = dto.getInstrumentType();
@@ -40,5 +43,6 @@ public class MLEntity {
                 this.userEmail = userEmail;
                 this.spleeterOutputPath = dto.getSpleeterOutputPath();
                 this.basicPitchOutputPath = dto.getBasicPitchOutputPath();
+                this.musescoreOutputPath = dto.getMusescoreOutputPath();
         }
 }

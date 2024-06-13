@@ -87,7 +87,7 @@ public class MLService
 
         public void sendMLDtoToFastApi(MLDto mlDto) throws Exception
         {
-                String fastApiUrl = "http://machine-learning:5000/api/ml/getFile";
+                String fastApiUrl = "http://machine-learning:5000/api/ml/ml_dto";
 
                 RestTemplate restTemplate = new RestTemplate();
                 HttpHeaders headers = new HttpHeaders();
