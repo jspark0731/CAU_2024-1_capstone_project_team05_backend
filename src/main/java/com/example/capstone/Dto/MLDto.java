@@ -16,4 +16,5 @@ public class MLDto
         private String email; // foreign key in User Table
         private String spleeterOutputPath;
         private String basicPitchOutputPath;
+        private String musescoreOutputPath;
 }

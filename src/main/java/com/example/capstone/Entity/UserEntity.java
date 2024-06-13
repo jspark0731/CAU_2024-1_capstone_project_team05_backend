@@ -29,6 +29,9 @@ public class UserEntity
         @OneToMany(mappedBy = "userEmail")
         private List<MLEntity> mlEntities;
 
+        @OneToMany(mappedBy = "userEmail")
+        private List<SheetEntity> sheetEntities;
+
         public UserEntity(SignUpDto dto)
         {
                 this.email = dto.getEmail();
